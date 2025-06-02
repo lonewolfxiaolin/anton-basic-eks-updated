@@ -8,6 +8,10 @@
        eks.amazonaws.com/role-arn: <HERE>
 
 4) kubectl apply -f irsa-demo/sa.yaml
+   OR
+   kubectl create serviceaccount aws-test 
+   kubectl annotate serviceaccount aws-test eks.amazonaws.com/role-arn=<ROLE ARN> 
+
    kubectl get sa
 
 5) kubectl apply -f irsa-demo/pod.yaml
