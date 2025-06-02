@@ -4,4 +4,4 @@ metadata:
   name: aws-test
   namespace: default
   annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::<account_id>:role/test-oidc #CHANGE THIS
+    eks.amazonaws.com/role-arn: arn:aws:iam::715918197805:role/test-oidc #CHANGE THIS
