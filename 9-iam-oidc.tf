@@ -1,4 +1,4 @@
-# IRSA Config file (I think)
+# IRSA Config file (I think...)
 
 # Why do we need this? Stuff like:
 # 1) Give a Kubernetes pod access to S3, Secrets Manager, etc.
