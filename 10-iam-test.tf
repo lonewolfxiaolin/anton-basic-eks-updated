@@ -1,10 +1,10 @@
-# IRSA demo
-# ###################
-# aws_iam_policy_document:	        Trust relationship (who can assume the role)
-# aws_iam_role:	                    The actual IAM role that pods can assume
-# aws_iam_policy:             	    Permissions granted to the role
-# aws_iam_role_policy_attachment:	Attaches the permissions to the role
-# output:                     	    Shows the role ARN for later reference
+# # IRSA demo
+# # ###################
+# # aws_iam_policy_document:	        Trust relationship (who can assume the role)
+# # aws_iam_role:	                    The actual IAM role that pods can assume
+# # aws_iam_policy:             	    Permissions granted to the role
+# # aws_iam_role_policy_attachment:	Attaches the permissions to the role
+# # output:                     	    Shows the role ARN for later reference
 
 
 # data "aws_iam_policy_document" "test_oidc_assume_role_policy" {
