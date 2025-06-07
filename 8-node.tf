@@ -37,9 +37,9 @@ resource "aws_eks_node_group" "private-nodes" {
   # attach to control plane (EKS service)
   cluster_name    = aws_eks_cluster.demo.name
   node_group_name = "${var.cluster_name}-private-nodes"
-  
+
   # attach IAM role (with the 3 above policies: EKSWorkerNode, EKS_CNI, EC2ContainerRegistryReadOnly )
-  node_role_arn   = aws_iam_role.nodes.arn
+  node_role_arn = aws_iam_role.nodes.arn
 
   subnet_ids = [
     aws_subnet.private_zone1.id,
@@ -81,12 +81,12 @@ resource "aws_eks_node_group" "private-nodes" {
     aws_iam_role_policy_attachment.nodes-AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.nodes-AmazonEC2ContainerRegistryReadOnly,
   ]
-  
+
   # current node size and desired size may conflict so have terraform ignore these on all "terraform apply"
   # after the inital build to avoid unexpected chaneges
   # look in terraform documentation to understand this meta-argument
   lifecycle {
-    ignore_changes = [ scaling_config[0].desired_size ]
+    ignore_changes = [scaling_config[0].desired_size]
   }
 }
 

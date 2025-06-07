@@ -33,15 +33,15 @@ resource "aws_iam_role_policy_attachment" "demo-AmazonEKSClusterPolicy" {
 resource "aws_eks_cluster" "demo" {
   name     = var.cluster_name
   role_arn = aws_iam_role.demo.arn
- 
-  
+
+
   # Network configurations for cluster
   vpc_config {
-    
+
     # for now, we have a public endpoint for kubectl as we dont have a VPN or similar
     # these are set by default
     endpoint_private_access = false
-    endpoint_public_access = true
+    endpoint_public_access  = true
 
     subnet_ids = [
       aws_subnet.private_zone1.id,
@@ -50,10 +50,10 @@ resource "aws_eks_cluster" "demo" {
       aws_subnet.public_zone2.id
     ]
   }
-  
+
   # ensure latest access config policy is API and bpptstrap access config
   access_config {
-    authentication_mode = "API"
+    authentication_mode                         = "API"
     bootstrap_cluster_creator_admin_permissions = true
   }
 
