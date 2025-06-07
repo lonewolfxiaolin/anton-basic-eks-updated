@@ -18,26 +18,35 @@ resource "aws_iam_role_policy_attachment" "nodes-AmazonEKSWorkerNodePolicy" {
   role       = aws_iam_role.nodes.name
 }
 
+# Use Amazon VPC CNI Plugin rather than Flannel or similar
+# this is the IAM policy for podes to use native VPC network rather than virtual pod network
 resource "aws_iam_role_policy_attachment" "nodes-AmazonEKS_CNI_Policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
   role       = aws_iam_role.nodes.name
 }
 
+# EKS Registry IAM policy
 resource "aws_iam_role_policy_attachment" "nodes-AmazonEC2ContainerRegistryReadOnly" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   role       = aws_iam_role.nodes.name
 }
 
+# Node group which is an ASG(s) managed by EKS service
 resource "aws_eks_node_group" "private-nodes" {
+
+  # attach to control plane (EKS service)
   cluster_name    = aws_eks_cluster.demo.name
-  node_group_name = "private-nodes"
+  node_group_name = "${var.cluster_name}-private-nodes"
+  
+  # attach IAM role (with the 3 above policies: EKSWorkerNode, EKS_CNI, EC2ContainerRegistryReadOnly )
   node_role_arn   = aws_iam_role.nodes.arn
 
   subnet_ids = [
-    aws_subnet.private-us-east-1a.id,
-    aws_subnet.private-us-east-1b.id
+    aws_subnet.private_zone1.id,
+    aws_subnet.private_zone2.id
   ]
 
+  # standard EC2 instances
   capacity_type  = "ON_DEMAND"
   instance_types = ["t3.small"]
 
@@ -47,6 +56,7 @@ resource "aws_eks_node_group" "private-nodes" {
     min_size     = 0
   }
 
+  # how many nodes can be down during OS/K8s upgrades
   update_config {
     max_unavailable = 1
   }
@@ -71,6 +81,10 @@ resource "aws_eks_node_group" "private-nodes" {
     aws_iam_role_policy_attachment.nodes-AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.nodes-AmazonEC2ContainerRegistryReadOnly,
   ]
+
+  lifecycle {
+    ignore_changes = [ scaling_config[0].desired_size ]
+  }
 }
 
 # resource "aws_launch_template" "eks-with-disks" {
