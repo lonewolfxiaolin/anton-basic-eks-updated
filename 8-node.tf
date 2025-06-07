@@ -51,7 +51,7 @@ resource "aws_eks_node_group" "private-nodes" {
   instance_types = ["t3.small"]
 
   scaling_config {
-    desired_size = 1
+    desired_size = 2
     max_size     = 5
     min_size     = 0
   }
@@ -81,7 +81,10 @@ resource "aws_eks_node_group" "private-nodes" {
     aws_iam_role_policy_attachment.nodes-AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.nodes-AmazonEC2ContainerRegistryReadOnly,
   ]
-
+  
+  # current node size and desired size may conflict so have terraform ignore these on all "terraform apply"
+  # after the inital build to avoid unexpected chaneges
+  # look in terraform documentation to understand this meta-argument
   lifecycle {
     ignore_changes = [ scaling_config[0].desired_size ]
   }
