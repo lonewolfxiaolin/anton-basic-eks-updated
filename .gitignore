@@ -40,3 +40,4 @@ terraform.rc
 *.json 
 
 .terraform.lock.hcl
+example.kubeconfig
