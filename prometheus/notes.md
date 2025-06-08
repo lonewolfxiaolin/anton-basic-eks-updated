@@ -43,6 +43,6 @@ metadata:
 
 7) Open in browser 
 - step: Access UI
-- url: (UI)[http://localhost:9090]
+- url: [UI](http://localhost:9090)
 - at localhost on port 9090
 
