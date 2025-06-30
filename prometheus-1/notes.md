@@ -70,15 +70,17 @@ button_clicks_total
 
 ## Grafana (standalone):
 
-```helm repo add grafana https://grafana.github.io/helm-charts```
-```helm repo update```
+- ```helm repo add grafana https://grafana.github.io/helm-charts```
+- ```helm repo update```
 
-```kubectl get secret --namespace observability monitoring-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo```
+- ```kubectl get secret --namespace observability monitoring-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo```
+
 ### standard
 ```bash
 helm install grafana grafana/grafana \
   --namespace observability  \
-  --set service.type=LoadBalance```
+  --set service.type=LoadBalance
+  ```
 
 ### with persistance 
 ```bash
@@ -86,14 +88,16 @@ helm install grafana grafana/grafana \
   --namespace observability --create-namespace \
   --set service.type=LoadBalancer \
   --set persistence.enabled=true \
-  --set persistence.storageClassName="gp2"```
+  --set persistence.storageClassName="gp2"
+  ```
 
 ```bash
   helm upgrade monitoring prometheus-community/kube-prometheus-stack \
   --namespace monitoring \
   --set grafana.persistence.enabled=true \
   --set grafana.persistence.storageClassName="gp2" \
-  --set grafana.persistence.size="10Gi"```
+  --set grafana.persistence.size="10Gi"
+  ```
 
   ### sample metrics
  - node_cpu_seconds_total
@@ -102,9 +106,12 @@ helm install grafana grafana/grafana \
 
 
  ## Kube-prom-stack
+ (not needed if used helm for standalone prometheus)
 ```bash
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo update```
+helm repo update
+```
+
 
 ```bash
 helm install monitoring prometheus-community/kube-prometheus-stack \
@@ -116,7 +123,8 @@ helm install monitoring prometheus-community/kube-prometheus-stack \
  --set grafana.persistence.enabled=true \
  --set grafana.persistence.storageClassName="gp2" \
  --set alertmanager.alertmanagerSpec.storage.volumeClaimTemplate.spec.storageClassName="gp2" \
- --set alertmanager.alertmanagerSpec.storage.volumeClaimTemplate.spec.resources.requests.storage="10Gi"```
+ --set alertmanager.alertmanagerSpec.storage.volumeClaimTemplate.spec.resources.requests.storage="10Gi"
+ ```
 
 ```helm uninstall monitoring -n observability```
 ```kubectl delete namespace observability```
