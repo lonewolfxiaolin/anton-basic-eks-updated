@@ -1,7 +1,7 @@
 
 # Prometheus Installation with Helm 
 
-
+## Prometheus (standalone)
 
 1) Add Prometheus Helm repo 
 - step: Add Helm repo
@@ -43,15 +43,13 @@ metadata:
   --set server.persistentVolume.storageClass="gp2"
   ```
 
+  ```bash
   helm install prometheus prometheus-community/prometheus \
   --namespace observability --create-namespace \
   --set alertmanager.persistence.storageClass="gp2" \
   --set server.persistentVolume.storageClass="gp2" \
   --set server.service.type=LoadBalancer
-
-
-button_clicks_total
-
+  ```
 
 5) Verify the Prometheus pods are running 
 - step: Check pods
@@ -66,7 +64,8 @@ button_clicks_total
 - url: [UI](http://localhost:9090)
 - at localhost on port 9090
 
-
+## counter app
+custom metric: button_clicks_total
 
 ## Grafana (standalone):
 
@@ -126,6 +125,7 @@ helm install monitoring prometheus-community/kube-prometheus-stack \
  --set alertmanager.alertmanagerSpec.storage.volumeClaimTemplate.spec.resources.requests.storage="10Gi"
  ```
 
+## uninstall
 ```helm uninstall monitoring -n observability```
 ```kubectl delete namespace observability```
 
