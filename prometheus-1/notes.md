@@ -64,8 +64,10 @@ metadata:
 - url: [UI](http://localhost:9090)
 - at localhost on port 9090
 
+
 ## counter app
 custom metric: button_clicks_total
+
 
 ## Grafana (standalone):
 
@@ -98,20 +100,22 @@ helm install grafana grafana/grafana \
   --set grafana.persistence.size="10Gi"
   ```
 
-  ### sample metrics
+### sample metrics
  - node_cpu_seconds_total
  - kube_pod_info
  - container_cpu_usage_seconds_total
 
 
  ## Kube-prom-stack
+
+ ### add repo
  (not needed if used helm for standalone prometheus)
 ```bash
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 ```
 
-
+### install
 ```bash
 helm install monitoring prometheus-community/kube-prometheus-stack \
  --namespace observability --create-namespace \
@@ -125,23 +129,23 @@ helm install monitoring prometheus-community/kube-prometheus-stack \
  --set alertmanager.alertmanagerSpec.storage.volumeClaimTemplate.spec.resources.requests.storage="10Gi"
  ```
 
-## uninstall
+### uninstall
 ```helm uninstall monitoring -n observability```
 ```kubectl delete namespace observability```
 
-## These metrics are automatically available:
+### These metrics are automatically available:
 - kube_pod_status_phase (pod states)
 - kube_deployment_status_replicas (deployment health)
 - kube_node_status_condition (node health)
 - node_cpu_seconds_total (CPU usage)
 - container_memory_usage_bytes (memory usage)
 
-## LB IPs
+### LB IPs
 - Grafana Dashboard: ```kubectl get svc monitoring-grafana -n observability -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'```
 
 - Prom Server: ```kubectl get svc monitoring-kube-prometheus-prometheus -n observability -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'```
 
-## pretty
+### pretty
 - ```echo "Grafana Dashboard: http://$(kubectl get svc monitoring-grafana -n observability -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'):80"```
 
 - ```echo "Prometheus Server: http://$(kubectl get svc monitoring-kube-prometheus-prometheus -n observability -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'):9090"```
