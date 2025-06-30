@@ -146,6 +146,11 @@ helm install monitoring prometheus-community/kube-prometheus-stack \
 - Prom Server: ```kubectl get svc monitoring-kube-prometheus-prometheus -n observability -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'```
 
 ### pretty
-- ```echo "Grafana Dashboard: http://$(kubectl get svc monitoring-grafana -n observability -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'):80"```
 
-- ```echo "Prometheus Server: http://$(kubectl get svc monitoring-kube-prometheus-prometheus -n observability -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'):9090"```
+- ```bash
+echo "Grafana Dashboard: http://$(kubectl get svc monitoring-grafana -n observability -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'):80"
+```
+
+- ```bash
+echo "Prometheus Server: http://$(kubectl get svc monitoring-kube-prometheus-prometheus -n observability -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'):9090"
+```
