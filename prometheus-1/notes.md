@@ -147,10 +147,10 @@ helm install monitoring prometheus-community/kube-prometheus-stack \
 
 ### pretty
 
-- ```bash
+```bash
 echo "Grafana Dashboard: http://$(kubectl get svc monitoring-grafana -n observability -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'):80"
 ```
 
-- ```bash
+```bash
 echo "Prometheus Server: http://$(kubectl get svc monitoring-kube-prometheus-prometheus -n observability -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'):9090"
 ```
