@@ -38,12 +38,19 @@ metadata:
 
 ```bash
  helm install prometheus prometheus-community/prometheus \
-  --namespace prometheus --create-namespace \
+  --namespace observability --create-namespace \
   --set alertmanager.persistence.storageClass="gp2" \
   --set server.persistentVolume.storageClass="gp2"
-
   ```
 
+  helm install prometheus prometheus-community/prometheus \
+  --namespace observability --create-namespace \
+  --set alertmanager.persistence.storageClass="gp2" \
+  --set server.persistentVolume.storageClass="gp2" \
+  --set server.service.type=LoadBalancer
+
+
+button_clicks_total
 
 
 5) Verify the Prometheus pods are running 
@@ -59,3 +66,74 @@ metadata:
 - url: [UI](http://localhost:9090)
 - at localhost on port 9090
 
+
+
+## Grafana (standalone):
+
+```helm repo add grafana https://grafana.github.io/helm-charts```
+```helm repo update```
+
+```kubectl get secret --namespace observability monitoring-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo```
+### standard
+```bash
+helm install grafana grafana/grafana \
+  --namespace observability  \
+  --set service.type=LoadBalance```
+
+### with persistance 
+```bash
+helm install grafana grafana/grafana \
+  --namespace observability --create-namespace \
+  --set service.type=LoadBalancer \
+  --set persistence.enabled=true \
+  --set persistence.storageClassName="gp2"```
+
+```bash
+  helm upgrade monitoring prometheus-community/kube-prometheus-stack \
+  --namespace monitoring \
+  --set grafana.persistence.enabled=true \
+  --set grafana.persistence.storageClassName="gp2" \
+  --set grafana.persistence.size="10Gi"```
+
+  ### sample metrics
+ - node_cpu_seconds_total
+ - kube_pod_info
+ - container_cpu_usage_seconds_total
+
+
+ ## Kube-prom-stack
+```bash
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update```
+
+```bash
+helm install monitoring prometheus-community/kube-prometheus-stack \
+ --namespace observability --create-namespace \
+ --set prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.storageClassName="gp2" \
+ --set prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage="50Gi" \
+ --set prometheus.service.type=LoadBalancer \
+ --set grafana.service.type=LoadBalancer \
+ --set grafana.persistence.enabled=true \
+ --set grafana.persistence.storageClassName="gp2" \
+ --set alertmanager.alertmanagerSpec.storage.volumeClaimTemplate.spec.storageClassName="gp2" \
+ --set alertmanager.alertmanagerSpec.storage.volumeClaimTemplate.spec.resources.requests.storage="10Gi"```
+
+```helm uninstall monitoring -n observability```
+```kubectl delete namespace observability```
+
+## These metrics are automatically available:
+- kube_pod_status_phase (pod states)
+- kube_deployment_status_replicas (deployment health)
+- kube_node_status_condition (node health)
+- node_cpu_seconds_total (CPU usage)
+- container_memory_usage_bytes (memory usage)
+
+## LB IPs
+- Grafana Dashboard: ```kubectl get svc monitoring-grafana -n observability -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'```
+
+- Prom Server: ```kubectl get svc monitoring-kube-prometheus-prometheus -n observability -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'```
+
+## pretty
+- ```echo "Grafana Dashboard: http://$(kubectl get svc monitoring-grafana -n observability -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'):80"```
+
+- ```echo "Prometheus Server: http://$(kubectl get svc monitoring-kube-prometheus-prometheus -n observability -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'):9090"```
