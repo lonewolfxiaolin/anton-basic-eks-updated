@@ -141,11 +141,13 @@ helm install monitoring prometheus-community/kube-prometheus-stack \
 - container_memory_usage_bytes (memory usage)
 
 ### LB IPs
+
+#### basic
 - Grafana Dashboard: ```kubectl get svc monitoring-grafana -n observability -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'```
 
 - Prom Server: ```kubectl get svc monitoring-kube-prometheus-prometheus -n observability -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'```
 
-### pretty
+#### pretty
 
 ```bash
 echo "Grafana Dashboard: http://$(kubectl get svc monitoring-grafana -n observability -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'):80"
