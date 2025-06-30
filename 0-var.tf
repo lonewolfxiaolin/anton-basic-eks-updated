@@ -1,8 +1,3 @@
-variable "enable_kubeconfig" {
-  default     = true
-  description = "Set to false to skip local kubeconfig update"
-}
-
 variable "region" {
   default = "us-east-1"
 }
