@@ -8,10 +8,10 @@ resource "aws_iam_openid_connect_provider" "oidc_provider" {
 
   tags = {
     Name = "${var.cluster_name}-eks-irsa"
-    }
+  }
 }
 
 locals {
   split_from_arn = split("oidc-provider/", aws_iam_openid_connect_provider.oidc_provider.arn)
-  extracted = element(local.split_from_arn, 1)
+  extracted      = element(local.split_from_arn, 1)
 }

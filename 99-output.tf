@@ -2,8 +2,8 @@ output "eks_cluster_info" {
   value = {
     name        = aws_eks_cluster.demo.name
     endpoint    = aws_eks_cluster.demo.endpoint
-    arn = aws_eks_cluster.demo.arn
-    id = aws_eks_cluster.demo.id
+    arn         = aws_eks_cluster.demo.arn
+    id          = aws_eks_cluster.demo.id
     description = "EKS cluster info"
   }
 }
@@ -23,7 +23,7 @@ output "eks_node_group_summary" {
 output "openid_connect_provider" {
   description = "AWS IAM Open ID Connect Provider ARN"
   value = {
-    arn = aws_iam_openid_connect_provider.oidc_provider.arn 
+    arn = aws_iam_openid_connect_provider.oidc_provider.arn
     url = aws_eks_cluster.demo.identity[0].oidc[0].issuer
   }
 }
