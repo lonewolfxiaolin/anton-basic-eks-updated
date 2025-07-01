@@ -129,6 +129,13 @@ helm install monitoring prometheus-community/kube-prometheus-stack \
  --set alertmanager.alertmanagerSpec.storage.volumeClaimTemplate.spec.resources.requests.storage="10Gi"
  ```
 
+### install with values.yaml
+```bash
+helm install monitoring prometheus-community/kube-prometheus-stack \
+  --namespace observability --create-namespace \
+  -f values.yaml
+```
+
 ### uninstall
 ```helm uninstall monitoring -n observability```
 ```kubectl delete namespace observability```
