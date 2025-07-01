@@ -137,8 +137,10 @@ helm install monitoring prometheus-community/kube-prometheus-stack \
 ```
 
 ### uninstall
-```helm uninstall monitoring -n observability```
-```kubectl delete namespace observability```
+
+- ```helm uninstall monitoring -n observability```
+
+- ```kubectl delete namespace observability```
 
 ### These metrics are automatically available:
 - kube_pod_status_phase (pod states)
