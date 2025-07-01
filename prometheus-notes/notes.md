@@ -133,7 +133,7 @@ helm install monitoring prometheus-community/kube-prometheus-stack \
 ```bash
 helm install monitoring prometheus-community/kube-prometheus-stack \
   --namespace observability --create-namespace \
-  -f values.yaml
+  -f prometheus-notes/kube-prom-values.yaml
 ```
 
 ### uninstall
